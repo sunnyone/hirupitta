@@ -19,10 +19,9 @@ export const lunchWorkflow = new Workflow({
     outputSchema: CondSchema,
     execute: async ({ trigger }) => {
       const { query } = trigger;
-      return await clarifyAgent.chatCompletionAsJSON({
-        messages: [{ role: "user", content: query }],
-        parse: CondSchema,
-      });
+      return await clarifyAgent.generate(
+        [{ role: "user", content: query }]
+      );
     },
   })
   .then({
@@ -33,8 +32,8 @@ export const lunchWorkflow = new Workflow({
     execute: async ({ prev }) => {
       const conditions = prev;
       const restaurants = await getRestaurants();
-      return await filterAgent.chatCompletionAsJSON({
-        messages: [
+      return await filterAgent.generate(
+        [
           {
             role: "user",
             content: JSON.stringify({
@@ -42,8 +41,8 @@ export const lunchWorkflow = new Workflow({
               conditions,
             }),
           },
-        ],
-      });
+        ]
+      );
     },
   })
   .then({
@@ -52,14 +51,14 @@ export const lunchWorkflow = new Workflow({
     description: "フィルタリングされたレストランを最適な順にランク付け",
     execute: async ({ prev }) => {
       const candidates = prev;
-      return await rankAgent.chatCompletion({
-        messages: [
+      return await rankAgent.generate(
+        [
           {
             role: "user",
             content: JSON.stringify({ cand: candidates }),
           },
-        ],
-      });
+        ]
+      );
     },
   })
   .commit();
