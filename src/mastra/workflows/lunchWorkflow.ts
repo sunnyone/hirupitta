@@ -17,10 +17,9 @@ export const lunchWorkflow = new Workflow({
     name: "要望の明確化",
     description: "ユーザーの自然な要望を構造化JSONに変換",
     outputSchema: CondSchema,
-    execute: async ({ trigger }) => {
-      const { query } = trigger;
+    execute: async ({ context }) => {
       return await clarifyAgent.generate(
-        [{ role: "user", content: query }]
+        [{ role: "user", content: context.triggerData.query }]
       );
     },
   })
