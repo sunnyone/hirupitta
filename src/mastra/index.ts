@@ -3,6 +3,13 @@ import { hirupittaAgent, clarifyAgent, filterAgent, rankAgent } from "./agents";
 import { lunchWorkflow } from "./workflows";
 
 export const mastra = new Mastra({
-    agents: [hirupittaAgent, clarifyAgent, filterAgent, rankAgent],
-    workflows: [lunchWorkflow]
+    agents: {
+        hirupitta: hirupittaAgent, 
+        clarify: clarifyAgent, 
+        filter: filterAgent, 
+        rank: rankAgent
+    },
+    workflows: {
+        lunch: lunchWorkflow
+    }
 });

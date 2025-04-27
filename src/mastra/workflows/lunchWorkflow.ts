@@ -9,9 +9,7 @@ const TriggerSchema = z.object({
 });
 
 export const lunchWorkflow = new Workflow({
-  id: "lunch-selector-workflow",
   name: "昼食選択ワークフロー",
-  description: "ユーザーの要望に基づいて最適なランチ候補を提案するワークフロー",
   triggerSchema: TriggerSchema,
 })
   .step({
@@ -34,7 +32,7 @@ export const lunchWorkflow = new Workflow({
     outputSchema: z.array(z.any()),
     execute: async ({ prev }) => {
       const conditions = prev;
-      const { restaurants } = await getRestaurants();
+      const restaurants = await getRestaurants();
       return await filterAgent.chatCompletionAsJSON({
         messages: [
           {

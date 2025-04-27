@@ -1,7 +1,7 @@
 import { Agent } from "@mastra/core/agent";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
-import { getRestaurants, RestaurantSchema } from "../../tools/getRestaurants";
+import { getRestaurants, RestaurantSchema, getRestaurantsTool } from "../../tools/getRestaurants";
 import { CondSchema } from "../../schemas/lunchSchemas";
 
 /* ------------------------------------------------------- *
@@ -60,7 +60,7 @@ export const filterAgent = new Agent({
 それ以外の文字列・説明文は禁止。
   `,
   model: openai("gpt-4o-mini"),
-  tools: { getRestaurants }, // 追加ツールが必要ならここへ
+  tools: { getRestaurantsTool }, // 追加ツールが必要ならここへ
 });
 
 /* ------------------------------------------------------- *
