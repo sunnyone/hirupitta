@@ -1,8 +1,8 @@
 import { Workflow, Step } from "@mastra/core/workflows";
 import { z } from "zod";
 import { clarifyAgent, filterAgent, rankAgent } from "../agents";
-import { getRestaurants } from "../tools/getRestaurants";
 import { CondSchema } from "../schemas/lunchSchemas";
+import { fetchRestaurantCsv, getRestaurantsCsvTool } from "../tools/getRestaurantCsv";
 
 const TriggerSchema = z.object({
   query: z.string().describe("ユーザーからの昼食に関する要望"),
@@ -30,7 +30,7 @@ export const lunchWorkflow = new Workflow({
     outputSchema: z.array(z.any()),
     execute: async ({ prev }) => {
       const conditions = prev;
-      const restaurants = await getRestaurants();
+      const restaurants = await fetchRestaurantCsv();
       return await filterAgent.generate(
         [
           {
