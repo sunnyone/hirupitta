@@ -1,6 +1,7 @@
 import { Agent } from "@mastra/core/agent";
 import { openai } from "@ai-sdk/openai";
 import { getRestaurantsTool } from "../../tools/getRestaurants";
+import { getRestaurantsCsvTool } from "../../tools/getRestaurantCsv";
 
 /* ------------------------------------------------------- *
  *  ⭐ 1) Clarify Agent                                     *
@@ -25,14 +26,13 @@ export const filterAgent = new Agent({
   instructions: `
 あなたは Lunch-Selector Workflow の「フィルタリング担当」です。
 ゴールは **"条件の一致度をスコアリングして並べること"** こと。
-restaurantsのうち、conditionsの条件の一致度を0〜100で表現して並べてください。
 
-**フォーマット厳守**:
-上記条件を通過した店舗を **RestaurantSchema[]** と同じ形で出力。
-それ以外の文字列・説明文は禁止。
+getRestaurantsCsvToolを使ってCSVを取得し、conditionsの条件の一致度を0〜100で表現して並べてください。
+
+絞り込んだ結果以外の文字列・説明文は禁止。
   `,
   model: openai("gpt-4o-mini"),
-  tools: { getRestaurantsTool }, // 追加ツールが必要ならここへ
+  tools: { getRestaurantsCsvTool },
 });
 
 /* ------------------------------------------------------- *

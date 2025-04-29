@@ -30,13 +30,13 @@ export const lunchWorkflow = new Workflow({
     outputSchema: z.array(z.any()),
     execute: async ({ prev }) => {
       const conditions = prev;
-      const restaurants = await fetchRestaurantCsv();
+      // const restaurants = await fetchRestaurantCsv();
       return await filterAgent.generate(
         [
           {
             role: "user",
             content: JSON.stringify({
-              restaurants,
+         //     restaurants,
               conditions,
             }),
           },
