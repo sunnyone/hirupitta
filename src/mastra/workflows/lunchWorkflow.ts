@@ -47,7 +47,7 @@ export const lunchWorkflow = new Workflow({
   .then({
     id: "rank",
     name: "レストランのランク付け",
-    description: "フィルタリングされたレストランを最適な順にランク付け",
+    description: "フィルタリングされたレストランを出力",
     execute: async ({ prev }) => {
       const candidates = prev;
       return await rankAgent.generate(
