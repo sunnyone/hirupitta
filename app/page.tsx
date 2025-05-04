@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { css } from '../styled-system/css';
+import { flex, stack, center } from '../styled-system/patterns';
 
 type Message = {
   id: string;
@@ -65,50 +67,153 @@ export default function Home() {
     }
   };
 
+  const chatContainer = css({
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: 'lg',
+  });
+
+  const chatHeader = css({
+    textAlign: 'center',
+    marginBottom: 'lg',
+  });
+
+  const messagesContainer = css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'md',
+    marginBottom: 'lg',
+    maxHeight: '500px',
+    overflowY: 'auto',
+    padding: 'md',
+    border: '1px solid token(colors.border)',
+    borderRadius: 'sm',
+  });
+
+  const emptyStateMessage = css({
+    textAlign: 'center',
+    padding: 'lg',
+    color: '#666',
+  });
+
+  const messageStyle = css({
+    padding: '10px 15px',
+    borderRadius: 'md',
+    maxWidth: '80%',
+  });
+
+  const userMessageStyle = css({
+    alignSelf: 'flex-end',
+    backgroundColor: 'token(colors.primary)',
+    color: 'white',
+  });
+
+  const agentMessageStyle = css({
+    alignSelf: 'flex-start',
+    backgroundColor: 'token(colors.secondary)',
+    color: 'token(colors.text)',
+  });
+
+  const inputContainer = flex({
+    gap: 'md',
+  });
+
+  const messageInput = css({
+    flexGrow: 1,
+    padding: 'md',
+    border: '1px solid token(colors.border)',
+    borderRadius: 'sm',
+  });
+
+  const sendButton = css({
+    padding: '10px 20px',
+    backgroundColor: 'token(colors.primary)',
+    color: 'white',
+    border: 'none',
+    borderRadius: 'sm',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#0060df',
+    },
+  });
+
+  const loading = center({
+    margin: '10px 0',
+  });
+
+  const loadingDots = flex({
+    gap: 'sm',
+  });
+
+  const loadingDot = css({
+    width: '8px',
+    height: '8px',
+    backgroundColor: 'token(colors.primary)',
+    borderRadius: '50%',
+    animation: 'bounce 1.4s infinite ease-in-out both',
+    '&:nth-child(1)': {
+      animationDelay: '-0.32s',
+    },
+    '&:nth-child(2)': {
+      animationDelay: '-0.16s',
+    },
+  });
+
+  const keyframes = {
+    bounce: {
+      '0%, 80%, 100%': {
+        transform: 'scale(0)',
+      },
+      '40%': {
+        transform: 'scale(1)',
+      },
+    },
+  };
+
   return (
-    <div className="chat-container">
-      <header className="chat-header">
+    <div className={chatContainer}>
+      <header className={chatHeader}>
         <h1>Hirupitta</h1>
         <p>今日の気分に合ったレストランを提案します</p>
       </header>
 
-      <div className="messages-container">
+      <div className={messagesContainer}>
         {messages.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+          <div className={emptyStateMessage}>
             「今日は和食が食べたい」や「静かな場所でランチしたい」など、あなたの気分を教えてください。
           </div>
         ) : (
-          messages.map((message) => (
+          messages.map((msg) => (
             <div
-              key={message.id}
-              className={`message ${message.sender === 'user' ? 'user-message' : 'agent-message'}`}
+              key={msg.id}
+              className={`${messageStyle} ${msg.sender === 'user' ? userMessageStyle : agentMessageStyle}`}
             >
-              {message.text}
+              {msg.text}
             </div>
           ))
         )}
         {isLoading && (
-          <div className="loading">
-            <div className="loading-dots">
-              <div className="loading-dot"></div>
-              <div className="loading-dot"></div>
-              <div className="loading-dot"></div>
+          <div className={loading}>
+            <div className={loadingDots}>
+              <div className={loadingDot}></div>
+              <div className={loadingDot}></div>
+              <div className={loadingDot}></div>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="input-container">
+      <form onSubmit={handleSubmit} className={inputContainer}>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="メッセージを入力..."
-          className="message-input"
+          className={messageInput}
           disabled={isLoading}
         />
-        <button type="submit" className="send-button" disabled={isLoading}>
+        <button type="submit" className={sendButton} disabled={isLoading}>
           送信
         </button>
       </form>

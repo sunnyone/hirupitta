@@ -1,5 +1,5 @@
 import React from 'react';
-import './globals.css';
+import './index.css';
 
 export const metadata = {
   title: 'Hirupitta - レストラン推薦チャット',
