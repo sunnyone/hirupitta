@@ -101,6 +101,8 @@ export default function Home() {
     padding: '10px 15px',
     borderRadius: 'md',
     maxWidth: '80%',
+
+    whiteSpace: "pre-wrap",
   });
 
   const userMessageStyle = css({
