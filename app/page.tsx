@@ -48,9 +48,10 @@ export default function Home() {
 
       const data = await response.json();
 
+      console.log(data);
       const agentMessage: Message = {
         id: Date.now().toString(),
-        text: data.response,
+        text: data.response?.text?.toString(),
         sender: 'agent',
       };
       setMessages((prev) => [...prev, agentMessage]);
