@@ -25,7 +25,7 @@ export const getRestaurantsCsvTool = createTool({
     }),
     outputSchema: z.string(),
     execute: async ({ }) => {
-        return { restaurants: await fetchCsvFromUrl(csvUrl) };
+        return await fetchCsvFromUrl(csvUrl);
     },
   });
   
