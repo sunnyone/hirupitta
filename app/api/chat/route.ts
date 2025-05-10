@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hirupittaAgent } from '../../../src/mastra/agents';
+import { mastra } from '../../../src/mastra';
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
+      const hirupittaAgent = mastra.getAgent('hirupitta');
       const result = await hirupittaAgent.generate([
         { role: 'user', content: query }
       ]);
