@@ -1,9 +1,5 @@
-import { registerOTel } from "@vercel/otel";
-import { getLangfuseExporter } from "./mastra/langfuse-exporter";
-
-export function register() {
-  registerOTel({
-    serviceName: "ai",
-    traceExporter: getLangfuseExporter(),
-  });
+export async function register() {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    await import('./instrumentation.node');
+  }
 }
