@@ -21,17 +21,28 @@ export default function Home() {
   }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log('Form submitted');
     e.preventDefault();
     if (!input.trim()) return;
 
+    const userMessageId = `user-${Date.now()}`;
+    const responseId = `agent-${Date.now()}`;
+    
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: userMessageId,
       text: input,
       sender: 'user',
     };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+
+    const placeholderMessage: Message = {
+      id: responseId,
+      text: '',
+      sender: 'agent',
+    };
+    setMessages((prev) => [...prev, placeholderMessage]);
 
     try {
       const response = await fetch('/api/chat', {
@@ -46,23 +57,51 @@ export default function Home() {
         throw new Error('Failed to get response');
       }
 
-      const data = await response.json();
+      console.log('Starting to read stream');
+      console.log('Response status:', response.status);
+      console.log('Response type:', response.type);
+      console.log('Response headers:', Array.from(response.headers.entries()));
+      
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let responseText = '';
 
-      console.log(data);
-      const agentMessage: Message = {
-        id: Date.now().toString(),
-        text: data.response?.text?.toString(),
-        sender: 'agent',
-      };
-      setMessages((prev) => [...prev, agentMessage]);
+      if (reader) {
+        console.log('Reader available');
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            console.log('Stream read:', { done, valueLength: value?.length });
+            if (done) {
+              console.log('Stream done');
+              break;
+            }
+            
+            const chunk = decoder.decode(value, { stream: true });
+            console.log('Decoded chunk:', chunk);
+            responseText += chunk;
+            
+            setMessages((prev) => 
+              prev.map((msg) => 
+                msg.id === responseId 
+                  ? { ...msg, text: responseText } 
+                  : msg
+              )
+            );
+          }
+        } catch (error) {
+          console.error('Error reading stream:', error);
+        }
+      }
     } catch (error) {
       console.error('Error:', error);
-      const errorMessage: Message = {
-        id: Date.now().toString(),
-        text: 'エラーが発生しました。もう一度お試しください。',
-        sender: 'agent',
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => 
+        prev.map((msg) => 
+          msg.id === responseId 
+            ? { ...msg, text: 'エラーが発生しました。もう一度お試しください。' } 
+            : msg
+        )
+      );
     } finally {
       setIsLoading(false);
     }
