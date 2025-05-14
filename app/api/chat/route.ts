@@ -22,14 +22,15 @@ export async function POST(request: NextRequest) {
     } catch (agentError: any) {
       console.error('Agent error:', agentError);
       
-      if (agentError.toString().includes('OpenAI API key is missing') || 
-          agentError.toString().includes('Incorrect API key provided')) {
+      if (agentError.toString().includes('API key is missing') || 
+          agentError.toString().includes('Incorrect API key provided') ||
+          agentError.toString().includes('Google Generative AI API key')) {
         
         let mockResponse = '';
         
         if (query.includes('静か') || query.includes('quiet')) {
           mockResponse = `
-開発モード: OpenAI APIキーが正しく設定されていません。
+開発モード: Google Generative AI APIキーが正しく設定されていません。
 
 以下はモックレスポンスです:
 
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
 `;
         } else if (query.includes('安い') || query.includes('cheap')) {
           mockResponse = `
-開発モード: OpenAI APIキーが正しく設定されていません。
+開発モード: Google Generative AI APIキーが正しく設定されていません。
 
 以下はモックレスポンスです:
 
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
 `;
         } else {
           mockResponse = `
-開発モード: OpenAI APIキーが正しく設定されていません。
+開発モード: Google Generative AI APIキーが正しく設定されていません。
 
 以下はモックレスポンスです:
 
