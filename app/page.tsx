@@ -184,6 +184,7 @@ export default function Home() {
         {messages.length === 0 ? (
           <div className={emptyStateMessage}>
             「今日は和食が食べたい」や「静かな場所でランチしたい」など、あなたの気分を教えてください。
+            (入力は学習に使われます)
           </div>
         ) : (
           messages.map((msg) => (
