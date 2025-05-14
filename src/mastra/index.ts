@@ -1,7 +1,7 @@
 import { Mastra } from '@mastra/core';
-import { LangfuseExporter } from "langfuse-vercel";
 import { hirupittaAgent, clarifyAgent, filterAgent, rankAgent } from "./agents";
 import { lunchWorkflow } from "./workflows";
+import { getLangfuseExporter } from './langfuse-exporter';
 
 export const mastra = new Mastra({
     agents: {
@@ -18,11 +18,7 @@ export const mastra = new Mastra({
         enabled: true,
         export: {
             type: "custom",
-            exporter: new LangfuseExporter({
-                publicKey: process.env.LANGFUSE_PUBLIC_KEY,
-                secretKey: process.env.LANGFUSE_SECRET_KEY,
-                baseUrl: process.env.LANGFUSE_HOST,
-            }),
+            exporter: getLangfuseExporter(),
         },
     }
 });
