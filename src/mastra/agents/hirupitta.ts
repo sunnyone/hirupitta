@@ -1,4 +1,4 @@
-import { openai } from '@ai-sdk/openai';
+import { google } from '@ai-sdk/google';
 import { Agent } from '@mastra/core/agent';
 import { getRestaurantsTool } from '../tools/getRestaurants';
 import { getRestaurantsCsvTool } from '../tools/getRestaurantCsv';
@@ -52,6 +52,6 @@ const instructions = `
 export const hirupittaAgent = new Agent({
   name: 'Hirupitta Agent',
   instructions,
-  model: openai('gpt-4o'),
+  model: google('gemini-2.5-flash-preview-04-17'),
   tools: { getRestaurantsCsvTool },
 });

@@ -1,5 +1,5 @@
 import { Agent } from "@mastra/core/agent";
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { getRestaurantsTool } from "../../tools/getRestaurants";
 import { getRestaurantsCsvTool } from "../../tools/getRestaurantCsv";
 
@@ -15,7 +15,7 @@ export const clarifyAgent = new Agent({
 ユーザーの曖昧な要望を解釈し、JSON形式で表現してください。
 
 `,
-  model: openai("gpt-4o-mini"),
+  model: google("gemini-2.5-flash-preview-04-17"),
 });
 
 /* ------------------------------------------------------- *
@@ -31,7 +31,7 @@ getRestaurantsCsvToolを使ってCSVを取得し、conditionsの条件の一致�
 
 絞り込んだ結果以外の文字列・説明文は禁止。
   `,
-  model: openai("gpt-4o-mini"),
+  model: google("gemini-2.5-flash-preview-04-17"),
   tools: { getRestaurantsCsvTool },
 });
 
@@ -63,5 +63,5 @@ export const rankAgent = new Agent({
 
 余分な改行や注釈は禁止。
   `,
-  model: openai("gpt-4o-mini"),
+  model: google("gemini-2.5-flash-preview-04-17"),
 });
