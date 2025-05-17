@@ -1,20 +1,20 @@
 import { registerOTel } from "@vercel/otel";
 
-console.error("Import meta outer");
-console.error(import.meta.url);
+console.log("Import meta outer");
+console.log(import.meta.url);
 
 export async function logDebuggingInfo() {
-  console.error("Debugging register");
-  console.error(registerOTel as any);
-  console.error(registerOTel.toString());
+  console.log("Debugging register");
+  console.log(registerOTel as any);
+  console.log(registerOTel.toString());
 
 
-  console.error("Import meta inner");
-  console.error(import.meta.url);
+  console.log("Import meta inner");
+  console.log(import.meta.url);
   const resolve = import.meta.resolve as any;
   if (resolve) {
-    console.error(resolve("@vercel/otel"));
+    console.log(resolve("@vercel/otel"));
   } else {
-    console.error("resolve is not found");
+    console.log("resolve is not found");
   }
 }
