@@ -15,3 +15,9 @@ const sdk = new NodeSDK({
 });
 
 sdk.start();
+
+process.on('SIGINT', async () => {
+  console.log("SIGINT trapped");
+  await sdk.shutdown();
+  console.log("SIGINT processed");
+});
