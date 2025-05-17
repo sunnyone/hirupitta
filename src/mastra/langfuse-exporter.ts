@@ -7,3 +7,5 @@ export function getLangfuseExporter() {
         baseUrl: process.env.LANGFUSE_HOST,
     });
 }
+
+export const exporter = getLangfuseExporter();

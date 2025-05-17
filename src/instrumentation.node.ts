@@ -3,9 +3,7 @@ import {
   ATTR_SERVICE_NAME,
   Resource,
 } from '@mastra/core/telemetry/otel-vendor';
-import { getLangfuseExporter } from "./mastra/langfuse-exporter";
-
-const exporter = getLangfuseExporter();
+import { exporter } from './mastra/langfuse-exporter';
 
 const sdk = new NodeSDK({
   resource: new Resource({

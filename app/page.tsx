@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { css } from '../styled-system/css';
 import { flex, stack, center } from '../styled-system/patterns';
+import { exporter } from '@/src/mastra/langfuse-exporter';
 
 type Message = {
   id: string;
@@ -63,6 +64,8 @@ export default function Home() {
         sender: 'agent',
       };
       setMessages((prev) => [...prev, errorMessage]);
+
+      await exporter.forceFlush();
     } finally {
       setIsLoading(false);
     }
