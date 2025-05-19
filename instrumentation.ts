@@ -26,5 +26,3 @@ export function register() {
   });
   waitUntil(exporter.forceFlush());
 }
-
-throw new Error("instrumentation.ts is called")
