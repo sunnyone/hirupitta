@@ -24,5 +24,5 @@ export function register() {
     serviceName: "ai",
     traceExporter: exporter,
   });
-  waitUntil(exporter.forceFlush());
+  
 }
