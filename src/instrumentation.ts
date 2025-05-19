@@ -10,7 +10,6 @@ export function register() {
   console.error(registerOTel as any);
   console.error(registerOTel.toString());
 
-
   console.error("Import meta inner");
   console.error(import.meta.url);
   const resolve = import.meta.resolve as any;
@@ -27,3 +26,5 @@ export function register() {
   });
   waitUntil(exporter.forceFlush());
 }
+
+throw new Error("instrumentation.ts is called")
