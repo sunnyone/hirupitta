@@ -3,6 +3,7 @@ import { hirupittaAgent, clarifyAgent, filterAgent, rankAgent } from "./agents";
 import { lunchWorkflow } from "./workflows";
 import { getLangfuseExporter } from './langfuse-exporter';
 
+console.log("Creating mastra");
 export const mastra = new Mastra({
     agents: {
         hirupitta: hirupittaAgent, 
@@ -22,3 +23,4 @@ export const mastra = new Mastra({
         },
     }
 });
+console.log("Mastra created");
