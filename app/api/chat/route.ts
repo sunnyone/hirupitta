@@ -7,6 +7,9 @@ export async function POST(request: NextRequest) {
   try {
     const { query } = await request.json();
 
+    console.log("Runtime");
+    console.log(process.env.NEXT_RUNTIME);
+
     if (!query) {
       return NextResponse.json(
         { error: 'Query is required' },
