@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         { role: 'user', content: query }
       ]);
       const exporter =  getLangfuseExporter();
-      exporter.forceFlush();
+      await exporter.forceFlush();
 
       return NextResponse.json({ response: result });
     } catch (agentError: any) {
