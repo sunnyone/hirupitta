@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mastra } from '../../../src/mastra';
 import { getLangfuseExporter } from '@/src/mastra/langfuse-exporter';
+import { waitUntil } from "@vercel/functions";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +20,8 @@ export async function POST(request: NextRequest) {
         { role: 'user', content: query }
       ]);
       const exporter =  getLangfuseExporter();
-      await exporter.forceFlush();
+      // await exporter.forceFlush();
+      waitUntil(exporter.forceFlush());
 
       return NextResponse.json({ response: result });
     } catch (agentError: any) {
