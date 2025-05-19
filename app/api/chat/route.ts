@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mastra } from '../../../src/mastra';
+import { getLangfuseExporter } from '@/src/mastra/langfuse-exporter';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +18,9 @@ export async function POST(request: NextRequest) {
       const result = await hirupittaAgent.generate([
         { role: 'user', content: query }
       ]);
-      
+      const exporter =  getLangfuseExporter();
+      exporter.forceFlush();
+
       return NextResponse.json({ response: result });
     } catch (agentError: any) {
       console.error('Agent error:', agentError);
