@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mastra } from '../../../src/mastra';
 
+interface Message {
+  id: string;
+  text: string;
+  sender: 'user' | 'agent';
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     let mastraMessages;
 
     if (body.messages && Array.isArray(body.messages)) {
-      mastraMessages = body.messages.map(msg => ({
+      mastraMessages = body.messages.map((msg: Message) => ({
         role: msg.sender === 'user' ? 'user' : 'assistant',
         content: msg.text
       }));
@@ -34,7 +40,7 @@ export async function POST(request: NextRequest) {
         let mockResponse = '';
         
         const lastUserMessage = body.messages 
-          ? body.messages.filter(msg => msg.sender === 'user').pop()?.text || ''
+          ? body.messages.filter((msg: Message) => msg.sender === 'user').pop()?.text || ''
           : body.query || '';
         
         if (lastUserMessage.includes('静か') || lastUserMessage.includes('quiet')) {
