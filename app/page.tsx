@@ -39,7 +39,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: input }),
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
       });
 
       if (!response.ok) {

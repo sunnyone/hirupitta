@@ -3,20 +3,26 @@ import { mastra } from '../../../src/mastra';
 
 export async function POST(request: NextRequest) {
   try {
-    const { query } = await request.json();
+    const body = await request.json();
+    let mastraMessages;
 
-    if (!query) {
+    if (body.messages && Array.isArray(body.messages)) {
+      mastraMessages = body.messages.map(msg => ({
+        role: msg.sender === 'user' ? 'user' : 'assistant',
+        content: msg.text
+      }));
+    } else if (body.query) {
+      mastraMessages = [{ role: 'user', content: body.query }];
+    } else {
       return NextResponse.json(
-        { error: 'Query is required' },
+        { error: 'Messages array or query is required' },
         { status: 400 }
       );
     }
 
     try {
       const hirupittaAgent = mastra.getAgent('hirupitta');
-      const result = await hirupittaAgent.generate([
-        { role: 'user', content: query }
-      ]);
+      const result = await hirupittaAgent.generate(mastraMessages);
       
       return NextResponse.json({ response: result });
     } catch (agentError: any) {
@@ -27,7 +33,11 @@ export async function POST(request: NextRequest) {
         
         let mockResponse = '';
         
-        if (query.includes('静か') || query.includes('quiet')) {
+        const lastUserMessage = body.messages 
+          ? body.messages.filter(msg => msg.sender === 'user').pop()?.text || ''
+          : body.query || '';
+        
+        if (lastUserMessage.includes('静か') || lastUserMessage.includes('quiet')) {
           mockResponse = `
 開発モード: OpenAI APIキーが正しく設定されていません。
 
@@ -40,7 +50,7 @@ export async function POST(request: NextRequest) {
 3. ガーデンレストラン（洋食）[80]
    💡 緑に囲まれた静かなテラス席あり
 `;
-        } else if (query.includes('安い') || query.includes('cheap')) {
+        } else if (lastUserMessage.includes('安い') || lastUserMessage.includes('cheap')) {
           mockResponse = `
 開発モード: OpenAI APIキーが正しく設定されていません。
 
