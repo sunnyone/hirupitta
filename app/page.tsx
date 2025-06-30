@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { css } from '../styled-system/css';
 import { flex, stack, center } from '../styled-system/patterns';
+import Link from 'next/link';
 
 type Message = {
   id: string;
@@ -178,6 +179,18 @@ export default function Home() {
       <header className={chatHeader}>
         <h1>Hirupitta</h1>
         <p>今日の気分に合ったレストランを提案します</p>
+        <Link 
+          href="/add-restaurant" 
+          style={{ 
+            color: 'token(colors.primary)', 
+            textDecoration: 'underline',
+            fontSize: '14px',
+            marginTop: '8px',
+            display: 'inline-block'
+          }}
+        >
+          レストラン情報を追加 →
+        </Link>
       </header>
 
       <div className={messagesContainer}>
