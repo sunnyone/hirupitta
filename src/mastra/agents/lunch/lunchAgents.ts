@@ -1,6 +1,6 @@
 import { Agent } from "@mastra/core/agent";
-import { openai } from "@ai-sdk/openai";
 import { getRestaurantsCsvTool } from "../../tools/getRestaurantCsv";
+import { defaultChatModel } from "../../llm/model";
 
 /* ------------------------------------------------------- *
  *  ⭐ 1) Clarify Agent                                     *
@@ -15,7 +15,7 @@ export const clarifyAgent = new Agent({
 ユーザーの曖昧な要望を解釈し、JSON形式で表現してください。
 
 `,
-  model: openai("gpt-4o-mini"),
+  model: defaultChatModel,
 });
 
 /* ------------------------------------------------------- *
@@ -32,7 +32,7 @@ getRestaurantsCsvToolを使ってCSVを取得し、conditionsの条件の一致�
 
 絞り込んだ結果以外の文字列・説明文は禁止。
   `,
-  model: openai("gpt-4o-mini"),
+  model: defaultChatModel,
   tools: { getRestaurantsCsvTool },
 });
 
@@ -65,5 +65,5 @@ export const rankAgent = new Agent({
 
 余分な改行や注釈は禁止。
   `,
-  model: openai("gpt-4o-mini"),
+  model: defaultChatModel,
 });

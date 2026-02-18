@@ -1,6 +1,6 @@
-import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
 import { getRestaurantsCsvTool } from '../tools/getRestaurantCsv';
+import { defaultChatModel } from '../llm/model';
 
 const instructions = `
 あなたは地元レストランのコンシェルジュです。
@@ -68,6 +68,6 @@ export const hirupittaAgent = new Agent({
   id: 'hirupitta-agent',
   name: 'Hirupitta Agent',
   instructions,
-  model: openai('gpt-5-mini-2025-08-07'),
+  model: defaultChatModel,
   tools: { getRestaurantsCsvTool },
 });

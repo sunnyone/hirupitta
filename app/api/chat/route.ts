@@ -34,8 +34,12 @@ export async function POST(request: NextRequest) {
     } catch (agentError: any) {
       console.error('Agent error:', agentError);
       
-      if (agentError.toString().includes('OpenAI API key is missing') || 
-          agentError.toString().includes('Incorrect API key provided')) {
+      if (
+        agentError.toString().includes('OpenAI API key is missing') ||
+        agentError.toString().includes('Incorrect API key provided') ||
+        agentError.toString().includes('401') ||
+        agentError.toString().includes('Unauthorized')
+      ) {
         
         let mockResponse = '';
         
@@ -45,7 +49,7 @@ export async function POST(request: NextRequest) {
         
         if (lastUserMessage.includes('静か') || lastUserMessage.includes('quiet')) {
           mockResponse = `
-開発モード: OpenAI APIキーが正しく設定されていません。
+開発モード: LLM APIキーまたは接続先設定が正しくありません。
 
 以下はモックレスポンスです:
 
@@ -58,7 +62,7 @@ export async function POST(request: NextRequest) {
 `;
         } else if (lastUserMessage.includes('安い') || lastUserMessage.includes('cheap')) {
           mockResponse = `
-開発モード: OpenAI APIキーが正しく設定されていません。
+開発モード: LLM APIキーまたは接続先設定が正しくありません。
 
 以下はモックレスポンスです:
 
@@ -71,7 +75,7 @@ export async function POST(request: NextRequest) {
 `;
         } else {
           mockResponse = `
-開発モード: OpenAI APIキーが正しく設定されていません。
+開発モード: LLM APIキーまたは接続先設定が正しくありません。
 
 以下はモックレスポンスです:
 
