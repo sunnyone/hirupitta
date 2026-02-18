@@ -29,7 +29,7 @@ export const getRestaurantsTool = createTool({
     outputSchema: z.object({
         restaurants: z.array(RestaurantSchema)
     }),
-    execute: async ({ context }) => {
+    execute: async () => {
         return { restaurants: await getRestaurants() };
     },
   });

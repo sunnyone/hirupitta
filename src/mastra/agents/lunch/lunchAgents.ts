@@ -1,12 +1,12 @@
 import { Agent } from "@mastra/core/agent";
 import { openai } from "@ai-sdk/openai";
-import { getRestaurantsTool } from "../../tools/getRestaurants";
 import { getRestaurantsCsvTool } from "../../tools/getRestaurantCsv";
 
 /* ------------------------------------------------------- *
  *  ⭐ 1) Clarify Agent                                     *
  * ------------------------------------------------------- */
 export const clarifyAgent = new Agent({
+  id: "clarify-agent",
   name: "Clarify Agent",
   instructions: `
 あなたは「Lunch-Selector Workflow」の最初の守護者です。
@@ -22,6 +22,7 @@ export const clarifyAgent = new Agent({
  *  ⭐ 2) Filter Agent                                      *
  * ------------------------------------------------------- */
 export const filterAgent = new Agent({
+  id: "filter-agent",
   name: "Filter Agent",
   instructions: `
 あなたは Lunch-Selector Workflow の「フィルタリング担当」です。
@@ -39,6 +40,7 @@ getRestaurantsCsvToolを使ってCSVを取得し、conditionsの条件の一致�
  *  ⭐ 3) Rank Agent                                        *
  * ------------------------------------------------------- */
 export const rankAgent = new Agent({
+  id: "rank-agent",
   name: "Rank Agent",
   /**
    * System-level Instructions

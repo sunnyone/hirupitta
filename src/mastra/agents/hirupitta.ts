@@ -1,6 +1,5 @@
 import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
-import { getRestaurantsTool } from '../tools/getRestaurants';
 import { getRestaurantsCsvTool } from '../tools/getRestaurantCsv';
 
 const instructions = `
@@ -66,6 +65,7 @@ const instructions = `
 `;
 
 export const hirupittaAgent = new Agent({
+  id: 'hirupitta-agent',
   name: 'Hirupitta Agent',
   instructions,
   model: openai('gpt-4o'),

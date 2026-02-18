@@ -1,7 +1,8 @@
 import { Mastra } from '@mastra/core';
+import { Observability } from '@mastra/observability';
+import { LangfuseExporter } from '@mastra/langfuse';
 import { hirupittaAgent, clarifyAgent, filterAgent, rankAgent } from "./agents";
 import { lunchWorkflow } from "./workflows";
-import { getLangfuseExporter } from './langfuse-exporter';
 
 export const mastra = new Mastra({
     agents: {
@@ -13,12 +14,12 @@ export const mastra = new Mastra({
     workflows: {
         lunch: lunchWorkflow
     },
-    telemetry: {
-        serviceName: "ai", // this must be set to "ai" so that the LangfuseExporter thinks it's an AI SDK trace
-        enabled: true,
-        export: {
-            type: "custom",
-            exporter: getLangfuseExporter(),
+    observability: new Observability({
+        configs: {
+            default: {
+                serviceName: "ai",
+                exporters: [new LangfuseExporter()],
+            },
         },
-    }
+    }),
 });

@@ -1,4 +1,4 @@
-import { createTool } from "@mastra/core";
+import { createTool } from "@mastra/core/tools";
 import {z} from "zod";
 
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQH5NNPjipDl1cHc2z1GElfrlrtQ4Wb8yvgy644XEEygWOIIw5VyqeD9WRMd1ljhCrVVEmgmpyypA2o/pub?output=csv";
@@ -24,7 +24,7 @@ export const getRestaurantsCsvTool = createTool({
     inputSchema: z.object({
     }),
     outputSchema: z.string(),
-    execute: async ({ }) => {
+    execute: async () => {
         return await fetchCsvFromUrl(csvUrl);
     },
   });

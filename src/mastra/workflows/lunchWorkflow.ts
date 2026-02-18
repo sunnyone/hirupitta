@@ -1,63 +1,64 @@
-import { Workflow, Step } from "@mastra/core/workflows";
+import { createStep, createWorkflow } from "@mastra/core/workflows";
 import { z } from "zod";
 import { clarifyAgent, filterAgent, rankAgent } from "../agents";
-import { CondSchema } from "../schemas/lunchSchemas";
-import { fetchRestaurantCsv, getRestaurantsCsvTool } from "../tools/getRestaurantCsv";
 
 const TriggerSchema = z.object({
   query: z.string().describe("ユーザーからの昼食に関する要望"),
 });
 
-export const lunchWorkflow = new Workflow({
-  name: "昼食選択ワークフロー",
-  triggerSchema: TriggerSchema,
+const clarifyStep = createStep({
+  id: "clarify",
+  description: "ユーザーの自然な要望を構造化JSONに変換",
+  inputSchema: TriggerSchema,
+  outputSchema: z.any(),
+  execute: async ({ inputData }) => {
+    return await clarifyAgent.generate([
+      { role: "user", content: inputData.query },
+    ]);
+  },
+});
+
+const filterStep = createStep({
+  id: "filter",
+  description: "条件に基づいてレストランをフィルタリング",
+  inputSchema: z.any(),
+  outputSchema: z.any(),
+  execute: async ({ inputData }) => {
+    const conditions = inputData;
+    return await filterAgent.generate([
+      {
+        role: "user",
+        content: JSON.stringify({
+          conditions,
+        }),
+      },
+    ]);
+  },
+});
+
+const rankStep = createStep({
+  id: "rank",
+  description: "フィルタリングされたレストランを出力",
+  inputSchema: z.any(),
+  outputSchema: z.any(),
+  execute: async ({ inputData }) => {
+    const candidates = inputData;
+    return await rankAgent.generate([
+      {
+        role: "user",
+        content: JSON.stringify({ cand: candidates }),
+      },
+    ]);
+  },
+});
+
+export const lunchWorkflow = createWorkflow({
+  id: "lunch-workflow",
+  description: "昼食選択ワークフロー",
+  inputSchema: TriggerSchema,
+  outputSchema: z.any(),
 })
-  .step({
-    id: "clarify",
-    name: "要望の明確化",
-    description: "ユーザーの自然な要望を構造化JSONに変換",
-    outputSchema: CondSchema,
-    execute: async ({ context }) => {
-      return await clarifyAgent.generate(
-        [{ role: "user", content: context.triggerData.query }]
-      );
-    },
-  })
-  .then({
-    id: "filter",
-    name: "レストランのフィルタリング",
-    description: "条件に基づいてレストランをフィルタリング",
-    outputSchema: z.array(z.any()),
-    execute: async ({ prev }) => {
-      const conditions = prev;
-      // const restaurants = await fetchRestaurantCsv();
-      return await filterAgent.generate(
-        [
-          {
-            role: "user",
-            content: JSON.stringify({
-         //     restaurants,
-              conditions,
-            }),
-          },
-        ]
-      );
-    },
-  })
-  .then({
-    id: "rank",
-    name: "レストランのランク付け",
-    description: "フィルタリングされたレストランを出力",
-    execute: async ({ prev }) => {
-      const candidates = prev;
-      return await rankAgent.generate(
-        [
-          {
-            role: "user",
-            content: JSON.stringify({ cand: candidates }),
-          },
-        ]
-      );
-    },
-  })
+  .then(clarifyStep)
+  .then(filterStep)
+  .then(rankStep)
   .commit();
