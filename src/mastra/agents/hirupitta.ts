@@ -68,6 +68,6 @@ export const hirupittaAgent = new Agent({
   id: 'hirupitta-agent',
   name: 'Hirupitta Agent',
   instructions,
-  model: openai('gpt-4o'),
+  model: openai('gpt-5-mini-2025-08-07'),
   tools: { getRestaurantsCsvTool },
 });
